@@ -1,26 +1,22 @@
 package cn.com.thread.test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TestMain {
 
-    public static List<String> list = new ArrayList<String>();
+  public static ReentrantLock lock = new ReentrantLock();
+  public static int i = 0;
 
-    public static void main(String[] args) {
-        list.add("aaaaa");
-        list.add("bbbbb");
-        list.add("ccccc");
+  public static void main(String[] args) throws InterruptedException {
+    Thread t1 = new Thread(new TestThread1());
+    Thread t2 = new Thread(new TestThread2());
+    t1.start();
+    t2.start();
+    t1.join();
+    t2.join();
 
-        TestThread1 tt1 = new TestThread1();
-
-
-        Thread t1 = new Thread(tt1);
-        t1.start();
-
-        TestThread2 tt2 = new TestThread2(t1);
-        new Thread(tt2).start();
+    System.out.println("finally i="+i);
 
 
-    }
+  }
 }
